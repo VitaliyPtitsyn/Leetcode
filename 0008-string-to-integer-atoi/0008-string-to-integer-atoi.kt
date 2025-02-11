@@ -1,51 +1,24 @@
 class Solution {
-    class ParsedNumber{
-        private val limits_up=Int.MAX_VALUE.toLong()
-        private val limits_Bottom :Long=limits_up +1L
-        private var isWriteNumberStarted=false
-        private var resultNumber=0L
-            set(value) {
-                field=value
-                isWriteNumberStarted=true
-            }
-         var isPositive=true
-            set(value) {
-                field=value
-                isWriteNumberStarted = true
-            }
-        fun isWriteAvailable() = !isWriteNumberStarted
-        fun incrementNumber(char: Char){
-            var incremnt = resultNumber
-            incremnt *=10
-            incremnt += Character.getNumericValue(char);
-            resultNumber = when {
-                isPositive && incremnt > limits_up -> limits_up
-                isPositive.not() && incremnt > limits_Bottom -> limits_Bottom
-                else -> incremnt
-            }
-            System.out.println("incrementNumber: $char resultNumber $resultNumber  incremnt$incremnt")
+   fun myAtoi(s: String): Int {
+        var i = 0
+        var res = 0
+        while (i < s.length && s[i] == ' ') i++
+        var pos = true
+        if (i < s.length && (s[i] == '+' || s[i] == '-')) {
+            pos = s[i] == '+'
+            i++
         }
-        fun provide(): Int =
-            if(isPositive){
-                if(resultNumber  > Int.MAX_VALUE) Int.MAX_VALUE else resultNumber.toInt()
-            } else  if(resultNumber *-1 < Int.MIN_VALUE) Int.MIN_VALUE else resultNumber.toInt() *-1
-    }
-    fun myAtoi(s: String): Int {
-        val targetNumber=ParsedNumber()
-       run breaking@ {
-            s.subSequence(0, s.length).forEach { char ->
-                System.out.println(char.code)
-                when (char.code) {
-                    ' '.code -> if (targetNumber.isWriteAvailable().not()) return@breaking
-                    '-'.code -> if (targetNumber.isWriteAvailable().not()) return@breaking else targetNumber.isPositive =
-                        false
-                    '+'.code -> if (targetNumber.isWriteAvailable().not()) return@breaking else targetNumber.isPositive =
-                        true
-                    in '0'.code..'9'.code -> targetNumber.incrementNumber(char)
-                    else -> return@breaking
-                }
+        while (i < s.length && s[i] in '0'..'9') {
+            var digit = s[i] - '0'
+            if (pos) {
+                if (res > (Int.MAX_VALUE - digit) / 10) return Int.MAX_VALUE
+                res = res * 10 + digit 
+            } else {
+                if (res < (Int.MIN_VALUE + digit) / 10) return Int.MIN_VALUE
+                res = res * 10 - digit 
             }
+            i++
         }
-        return targetNumber.provide()
+        return res
     }
 }
