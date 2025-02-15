@@ -32,7 +32,6 @@ class Solution {
         } else {
             endSymbol= romanNumberMap[order/2] ?: ""
         }
-        System.out.println("number $this  order $order endSymbol $endSymbol startSymbol $startSymbol  reminder $reminder ")
         when(reminder){
             in 1..3 -> {
                 if(this> 5)  builder.append(romanNumberMap[order/2])
@@ -45,7 +44,6 @@ class Solution {
             }
             0  -> {builder.append(endSymbol)}
         }
-        System.out.println("ADDER ${builder.toString()} ")
         return builder.toString()
     }
 }
